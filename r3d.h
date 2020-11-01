@@ -212,11 +212,7 @@ R3DDEF GBuffer LoadGBuffer(int width, int height)
     unsigned int buffers[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
 
 //TODO: Query for extensions, these must be checked to ensure the user platform supports them.. ES2 may support glDrawBuffersEXT().. WebGL may support through the ANGLE web extensions
-#if defined(GRAPHICS_API_OPENGL_ES2) // use extension where availible
-    glDrawBuffersEXT(3, buffers);
-#else //glDrawBuffers only availible on ES 3.0, GL 2, 3, 4
     glDrawBuffers(3, buffers);
-#endif
 
     glGenTextures(1, &gbuffer.depth.id);
     glBindTexture(GL_TEXTURE_2D, gbuffer.depth.id);
@@ -239,11 +235,6 @@ R3DDEF GBuffer LoadGBuffer(int width, int height)
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
             TraceLog(LOG_WARNING, "Framebuffer incomplete attachment");
             break;
-#if defined(GRAPHICS_API_OPENGL_ES2)
-        case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
-            TraceLog(LOG_WARNING, "Framebuffer incomplete dimensions");
-            break;
-#endif
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
             TraceLog(LOG_WARNING, "Framebuffer incomplete missing attachment");
             break;
