@@ -459,7 +459,7 @@ R3DDEF Model LoadModelAdvanced(const char *filename)
         if (aiGetMaterialTextureCount(aiModel->mMaterials[i], aiTextureType_SHININESS) > 0) {
             setTextureFromAssimpMaterial(aiModel, &model, i, aiTextureType_SHININESS, MAP_ROUGHNESS);
         }
-        
+
         // unsigned int roughnessAmount = aiGetMaterialTextureCount(aiModel->mMaterials[i], aiTextureType_DIFFUSE_ROUGHNESS);
         // unsigned int emissiveAmount = aiGetMaterialTextureCount(aiModel->mMaterials[i], aiTextureType_EMISSIVE);
         // unsigned int heightAmount = aiGetMaterialTextureCount(aiModel->mMaterials[i], aiTextureType_HEIGHT);
@@ -497,7 +497,7 @@ R3DDEF Model LoadModelAdvanced(const char *filename)
             for (int j = 0; j < model.meshes[i].vertexCount * 2; j += 2)
             {
                 model.meshes[i].texcoords[j] = importMesh->mTextureCoords[0][texCoord].x;
-                model.meshes[i].texcoords[j + 1] = importMesh->mTextureCoords[0][texCoord].y;
+                model.meshes[i].texcoords[j + 1] = 1.0 - importMesh->mTextureCoords[0][texCoord].y;
                 texCoord++;
             }
         }
@@ -510,7 +510,7 @@ R3DDEF Model LoadModelAdvanced(const char *filename)
             for (int j = 0; j < model.meshes[i].vertexCount * 2; j += 2)
             {
                 model.meshes[i].texcoords2[j] = importMesh->mTextureCoords[1][texCoord].x;
-                model.meshes[i].texcoords2[j + 1] = importMesh->mTextureCoords[1][texCoord].y;
+                model.meshes[i].texcoords2[j + 1] = 1.0 - importMesh->mTextureCoords[1][texCoord].y;
                 texCoord++;
             }
         }
