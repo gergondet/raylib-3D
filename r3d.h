@@ -516,13 +516,16 @@ R3DDEF Model LoadModelAdvanced(const char *filename)
         }
 
         model.meshes[i].normals = (float *)R3D_MALLOC((sizeof(float) * model.meshes[i].vertexCount) * 3);
-        unsigned int normalCounter = 0;
-        for (int j = 0; j < model.meshes[i].vertexCount * 3; j += 3)
+        if(importMesh->mNormals != NULL)
         {
-            model.meshes[i].normals[j] = importMesh->mNormals[normalCounter].x;
-            model.meshes[i].normals[j + 1] = importMesh->mNormals[normalCounter].y;
-            model.meshes[i].normals[j + 2] = importMesh->mNormals[normalCounter].z;
-            normalCounter++;
+          unsigned int normalCounter = 0;
+          for (int j = 0; j < model.meshes[i].vertexCount * 3; j += 3)
+          {
+              model.meshes[i].normals[j] = importMesh->mNormals[normalCounter].x;
+              model.meshes[i].normals[j + 1] = importMesh->mNormals[normalCounter].y;
+              model.meshes[i].normals[j + 2] = importMesh->mNormals[normalCounter].z;
+              normalCounter++;
+          }
         }
 
         unsigned int indiceTotal = 0;
