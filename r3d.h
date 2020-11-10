@@ -300,6 +300,7 @@ R3DDEF void SetDeferredModeShaderTexture(Texture texture, int i)
 #pragma region ASSIMP
 #if defined(R3D_ASSIMP_SUPPORT)
 #include <assimp/cimport.h>
+#include <assimp/color4.h>
 #include <assimp/scene.h>
 #include <assimp/types.h>
 #include <assimp/postprocess.h>
@@ -425,6 +426,11 @@ R3DDEF Model LoadModelAdvanced(const char *filename)
         model.materials[i] = LoadMaterialDefault();
 
         // TODO: Support Base Color texture type? It doesn't seem to be used, even in PBR material flows like GLTF
+        struct aiColor4D color = (struct aiColor4D){0.f, 0.f, 0.f, 0.f};
+        if (aiGetMaterialColor(aiModel->mMaterials[i], AI_MATKEY_COLOR_DIFFUSE, &color) == aiReturn_SUCCESS)
+        {
+            model.materials[i].maps[MAP_ALBEDO].color = (Color){(unsigned char)(color.r * 255), (unsigned char)(color.g * 255), (unsigned char)(color.b * 255), (unsigned char)(color.a * 255)};
+        }
         // unsigned int baseColorAmount = aiGetMaterialTextureCount(aiModel->mMaterials[i], aiTextureType_BASE_COLOR);
         if (aiGetMaterialTextureCount(aiModel->mMaterials[i], aiTextureType_DIFFUSE) > 0) {
             setTextureFromAssimpMaterial(aiModel, &model, i, aiTextureType_DIFFUSE, MAP_ALBEDO);
