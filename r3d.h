@@ -407,7 +407,11 @@ static Vector3 ConvertAIVector3D(struct aiVector3D vert)
 R3DDEF Model LoadModelAdvanced(const char *filename)
 {
     Model model = {0};
-    const struct aiScene *aiModel = aiImportFile(filename, aiProcess_Triangulate);
+    struct aiPropertyStore * props = aiCreatePropertyStore();
+    aiSetImportPropertyInteger(props, AI_CONFIG_PP_SLM_TRIANGLE_LIMIT, USHRT_MAX);
+    aiSetImportPropertyInteger(props, AI_CONFIG_PP_SLM_VERTEX_LIMIT, USHRT_MAX);
+    const struct aiScene *aiModel = aiImportFileExWithProperties(filename, aiProcess_Triangulate | aiProcess_SplitLargeMeshes, NULL, props);
+    aiReleasePropertyStore(props);
     //TODO Error handling for when a model isn't loaded successfully
     if (!aiModel)
     {
